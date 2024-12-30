@@ -13,6 +13,8 @@
     <form id="user-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
+        <label for="zipcode">Zipcode:</label>
+        <input type="text" id="zipcode" name="zipcode" required>
         <button type="submit">Add User</button>
     </form>
 
@@ -24,7 +26,7 @@
                 const userList = document.getElementById('user-list');
                 data.forEach(user => {
                     const li = document.createElement('li');
-                    li.textContent = `ID: ${user[0]}, Name: ${user[1]}`;
+                    li.textContent = `ID: ${user[0]}, Name: ${user[1]}, Zipcode: ${user[2]}, Weather: ${user[3]}`;
                     userList.appendChild(li);
                 });
             })
@@ -34,21 +36,23 @@
         document.getElementById('user-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const name = document.getElementById('name').value;
+            const zipcode = document.getElementById('zipcode').value;
 
             fetch('/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: name })
+                body: JSON.stringify({ name: name, zipcode: zipcode })
             })
             .then(response => response.json())
             .then(data => {
                 const userList = document.getElementById('user-list');
                 const li = document.createElement('li');
-                li.textContent = `${data.id}: ${data.name}`;
+                li.textContent = `ID: ${data[0]}, Name: ${data[1]}, Zipcode: ${data[2]}, Weather: ${data[3]}`;
                 userList.appendChild(li);
                 document.getElementById('name').value = '';
+                document.getElementById('zipcode').value = '';
             })
             .catch(err => console.error('Error:', err));
         });
