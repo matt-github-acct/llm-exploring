@@ -25,7 +25,7 @@ def get_db_connection():
 
 # Function to get weather based on zipcode
 def get_weather(zipcode):
-    api_key = 'f87c58e4e2464211810191201243012'  # Replace with your weather API key
+    api_key = 'f87c58e4e2464211810191201243012'  # throwaway api key, may need new account if stops working
     url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q={zipcode}'
     response = requests.get(url)
     print(response.status_code)
