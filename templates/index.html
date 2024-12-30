@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+</head>
+<body>
+    <h1>Users</h1>
+    <ul id="user-list"></ul>
+
+    <h2>Add New User</h2>
+    <form id="user-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Add User</button>
+    </form>
+
+    <script>
+        // Fetch and display users
+        fetch('/api/users')
+            .then(response => response.json())
+            .then(data => {
+                const userList = document.getElementById('user-list');
+                data.forEach(user => {
+                    const li = document.createElement('li');
+                    li.textContent = `ID: ${user[0]}, Name: ${user[1]}`;
+                    userList.appendChild(li);
+                });
+            })
+            .catch(err => console.error('Error:', err));
+
+        // Handle form submission
+        document.getElementById('user-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+
+            fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const userList = document.getElementById('user-list');
+                const li = document.createElement('li');
+                li.textContent = `${data.id}: ${data.name}`;
+                userList.appendChild(li);
+                document.getElementById('name').value = '';
+            })
+            .catch(err => console.error('Error:', err));
+        });
+    </script>
+</body>
+</html>
